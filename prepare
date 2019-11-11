@@ -32,13 +32,17 @@ if [ ! ${result} == 0 ]; then
     exit 1
 fi
 
+GOARCH=$(go env GOARCH)
+GOOS=$(go env GOOS)
+
 REPOSITORY_URL="https://server.rsmaxwell.co.uk/archiva/repository"
 REPOSITORYID="build"
 REPOSITORY="build"
 GROUPID="com.rsmaxwell.players"
-ARTIFACTID="players-api"
+NAME="players-api"
 PACKAGING="zip"
 
+ARTIFACTID=${NAME}-${GOARCH}-${GOOS}
 URL=${REPOSITORY_URL}/${REPOSITORY}/
 
 
