@@ -231,7 +231,7 @@ if [ ! $result == 0 ]; then
     exit 1
 fi
 
-filename_test=${HOME}/.m2/repository/${GROUPID//.//}/${ARTIFACTID}/${VERSION}/${ARTIFACTID}-${VERSION}-${CLASSIFIER_TEST}.${PACKAGING}
+filename_test=${HOME}/.m2/repository/${GROUPID//.//}/${ARTIFACTID}/${VERSION}/${ARTIFACTID}-${VERSION}-${CLASSIFIER}.${PACKAGING}
 if [ ! -f ${filename_test} ]; then
     echo "Error: $0[${LINENO}]"
     echo "result: ${result}"
