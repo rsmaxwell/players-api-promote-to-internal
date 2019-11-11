@@ -41,8 +41,8 @@ PACKAGING="zip"
 
 URL=${REPOSITORY_URL}/${REPOSITORY}/
 
-pom="pom.xml"
-tee >${pom} <<EOT
+
+cat <<EOT pom.xml
 <project>
 	<modelVersion>4.0.0</modelVersion>
 
@@ -68,6 +68,10 @@ tee >${pom} <<EOT
 
 </project>
 EOT
+
+echo "---[ pom.xml ]---------------------------------
+cat pom.xml
+
 
 mvn --batch-mode versions:use-latest-releases 1>stdout.txt 2>stderr.txt
 result=$?
