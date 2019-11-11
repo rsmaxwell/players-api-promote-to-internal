@@ -48,7 +48,7 @@ tee >${pom} <<EOT
 
 	<groupId>junk</groupId>
 	<artifactId>junk</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>junk</version>
 
 	<dependencies>
 		<dependency>
