@@ -42,7 +42,7 @@ PACKAGING="zip"
 URL=${REPOSITORY_URL}/${REPOSITORY}/
 
 
-cat <<EOT pom.xml
+cat <<EOT > pom.xml
 <project>
 	<modelVersion>4.0.0</modelVersion>
 
