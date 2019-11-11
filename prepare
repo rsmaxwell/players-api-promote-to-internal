@@ -69,9 +69,9 @@ cat <<EOT pom.xml
 </project>
 EOT
 
-echo "---[ pom.xml ]---------------------------------
+echo "---[ pom.xml ]---------------------------------"
 cat pom.xml
-
+echo "-----------------------------------------------"
 
 mvn --batch-mode versions:use-latest-releases 1>stdout.txt 2>stderr.txt
 result=$?
