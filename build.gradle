@@ -10,7 +10,11 @@ golang {
 apply plugin: 'maven-publish'
 
 configurations {
-    promote
+    promote {
+        resolutionStrategy {
+            cacheChangingModulesFor 0, 'seconds'
+        }
+    }
 }
 
 ext {
@@ -45,7 +49,7 @@ ext {
     packaging = "zip"
     classifier = "test"
 
-    latestVersion = "latest.integration" 
+    latestVersion = "latest.release" 
 }
 
 repositories {
@@ -89,6 +93,12 @@ ext {
 
 task clean(type: Delete) {
   delete 'build'
+}
+
+task debug {
+    doLast {
+        println "version: [${project.ext.myVersion}]"
+    }
 }
 
 task unzipMain(type: Copy) {
