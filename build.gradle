@@ -10,11 +10,11 @@ golang {
 apply plugin: 'maven-publish'
 
 configurations {
-    promote {
-        resolutionStrategy {
-            cacheChangingModulesFor 0, 'seconds'
-        }
-    }
+    promote
+}
+
+configurations.all {
+    resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
 }
 
 ext {
@@ -65,7 +65,7 @@ repositories {
 
 dependencies{
     promote "${groupID}:${artifactID}:${latestVersion}@${packaging}"
-    promote "${groupID}:${artifactID}:${latestVersion}:${classifier}@${packaging}"   
+    promote "${groupID}:${artifactID}:${latestVersion}:${classifier}@${packaging}"
 }
 
 ext {
