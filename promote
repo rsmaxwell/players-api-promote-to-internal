@@ -80,7 +80,7 @@ function latestVersion {
         exit 1
     fi
 
-    regex="<version>(.*)</version>"
+    regex="<latest>(.*)</latest>"
     if [[ ! ${line} =~ ${regex} ]]; then
         echo "Error: $0[${LINENO}]"
         echo "Could not find latest version"
