@@ -89,6 +89,7 @@ function latestVersion {
 
     rm -rf ${METADATA}
     latest_version="${BASH_REMATCH[1]}"
+    echo "${latest_version}"
 }
 
 #####################################################################
