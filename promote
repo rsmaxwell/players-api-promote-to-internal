@@ -120,7 +120,7 @@ result=$?
 if [ ${result} == 1 ]; then
     echo "Need to promote: ${latestVersionInternal} --> ${latestVersionBuild}"
 else
-    echo "UP-TO-DATE: version ${installed_version}"
+    echo "UP-TO-DATE: version ${latestVersionBuild}"
     exit 0
 fi
 
