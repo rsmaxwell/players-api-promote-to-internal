@@ -125,8 +125,15 @@ else
 fi
 
 #####################################################################
-# promote (by publishing to the target repository)
+# Test and promote (by publishing to the target repository)
 #####################################################################
+bash -x ./test
+result=$?
+if [ ! ${result} -eq 0 ]; then
+    echo "Error: $0[${LINENO}]"
+    echo "Test failed'"
+    exit 1
+fi
 
 gradle publish
 
