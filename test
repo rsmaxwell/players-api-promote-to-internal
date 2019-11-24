@@ -1,15 +1,17 @@
 #!/bin/bash
 
-#**************************************************************
-# Get the version
-#**************************************************************
-cd build
-pwd
-ls -al 
-jq . version.json
+rc=0
 
-generate_test_data=$(find . -name generate-test-data*)
-players_api=$(find . -name players-api*)
+pwd 
+ls -al 
+tree
+
+generate_test_data=$(find $(pwd) -name generate-test-data*)
+players_api=$(find $(pwd) -name players-api*)
+testclient=$(find $(pwd) -name testclient)
+
+cd build
+jq . version.json
 
 export PORT=4201
 export PLAYERS_API_ROOTDIR="database"
@@ -18,7 +20,14 @@ ${generate_test_data}
 ${players_api} &
 PID=$!
 
-../testclient
+${testclient}
+result=$?
+if [ ! ${result} -eq 0 ]; then
+    echo "Error: $0[${LINENO}]"
+    rc=1
+fi
 
 echo "killing the 'players-api' process"
 kill ${PID}
+
+exit ${rc}
