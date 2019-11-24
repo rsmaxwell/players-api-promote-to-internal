@@ -1,13 +1,8 @@
 #!/bin/bash
 
-set -x
 rc=0
 
-pwd 
-ls -al 
-tree
-
-generate_test_data=$(find $(pwd)build -name generate-test-data*)
+generate_test_data=$(find $(pwd)/build -name generate-test-data*)
 players_api=$(find $(pwd)/build -name players-api*)
 testclient=$(find $(pwd) -name testclient)
 
