@@ -1,13 +1,14 @@
 #!/bin/bash
 
+set -x
 rc=0
 
 pwd 
 ls -al 
 tree
 
-generate_test_data=$(find $(pwd) -name generate-test-data*)
-players_api=$(find $(pwd) -name players-api*)
+generate_test_data=$(find $(pwd)build -name generate-test-data*)
+players_api=$(find $(pwd)/build -name players-api*)
 testclient=$(find $(pwd) -name testclient)
 
 cd build
