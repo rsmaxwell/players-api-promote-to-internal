@@ -8,14 +8,14 @@ pwd
 ls -al 
 jq . version.json
 
-generate-test-data=$(find . -name generate-test-data*)
-players-api=$(find . -name players-api*)
+generate_test_data=$(find . -name generate-test-data*)
+players_api=$(find . -name players-api*)
 
 export PORT=4201
 export PLAYERS_API_ROOTDIR="database"
 
-./${generate-test-data}
-./${players-api} &
+${generate_test_data}
+${players_api} &
 PID=$!
 
 
