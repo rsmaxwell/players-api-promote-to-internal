@@ -18,7 +18,7 @@ ${generate_test_data}
 ${players_api} &
 PID=$!
 
-./testclient
+../testclient
 
 echo "killing the 'players-api' process"
 kill ${PID}
