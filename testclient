@@ -11,11 +11,11 @@ COMMAND="/users/register"
 
 cat > data.json <<EOT
 {  
-    "userID": "fred",
-    "firstname": "Fred",
-    "lastname": "Bloggs",
-    "email": "fred@bloggs.com",
-    "password": "fred"
+    "userID": "007",
+    "firstname": "James",
+    "lastname": "Bond",
+    "email": "007@mi6.uk.gov",
+    "password": "secret"
 }
 EOT
 cat data.json
