@@ -218,7 +218,7 @@ if [ ! ${result} -eq 0 ]; then
     exit 1
 fi
 
-if [ ${status} -ne 200 ]; then
+if [ ${status} -ne 401 ]; then
     echo "Error: $0[${LINENO}]"
     echo "status: ${status}"
     exit 1
