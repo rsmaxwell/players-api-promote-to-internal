@@ -22,6 +22,7 @@ jq . data.json
 
 curl ${OPTIONS} -X POST ${ENDPOINT}${COMMAND} \
 --header "Content-Type: application/json" \
+--header "Accept: application/json" \
 --data-binary @data.json \
 --output output.txt > status.txt
 
@@ -29,7 +30,7 @@ result=$?
 status=$(cat status.txt)
 
 echo "result: ${result}"
-printf "status: ${status}\n"
+echo "status: ${status}"
 jq . output.txt
 
 if [ ! ${result} -eq 0 ]; then
@@ -63,7 +64,7 @@ result=$?
 status=$(cat status.txt)
 
 echo "result: ${result}"
-printf "status: ${status}\n"
+echo "status: ${status}"
 jq . output.txt
 
 if [ ! ${result} -eq 0 ]; then
@@ -95,6 +96,7 @@ jq . data.json
 
 curl ${OPTIONS} -X POST ${ENDPOINT}${COMMAND} \
 --header "Content-Type: application/json" \
+--header "Accept: application/json" \
 --data-binary @data.json \
 --output output.txt > status.txt
 
@@ -102,7 +104,7 @@ result=$?
 status=$(cat status.txt)
 
 echo "result: ${result}"
-printf "status: ${status}\n"
+echo "status: ${status}"
 jq . output.txt
 
 if [ ! ${result} -eq 0 ]; then
@@ -142,7 +144,7 @@ result=$?
 status=$(cat status.txt)
 
 echo "result: ${result}"
-printf "status: ${status}\n"
+echo "status: ${status}"
 jq . output.txt
 
 if [ ! ${result} -eq 0 ]; then
@@ -178,7 +180,7 @@ result=$?
 status=$(cat status.txt)
 
 echo "result: ${result}"
-printf "status: ${status}\n"
+echo "status: ${status}"
 jq . output.txt
 
 if [ ! ${result} -eq 0 ]; then
@@ -206,7 +208,7 @@ result=$?
 status=$(cat status.txt)
 
 echo "result: ${result}"
-printf "status: ${status}\n"
+echo "status: ${status}"
 jq . output.txt
 
 if [ ! ${result} -eq 0 ]; then
@@ -246,7 +248,7 @@ result=$?
 status=$(cat status.txt)
 
 echo "result: ${result}"
-printf "status: ${status}\n"
+echo "status: ${status}"
 jq . output.txt
 
 if [ ! ${result} -eq 0 ]; then
@@ -274,7 +276,7 @@ result=$?
 status=$(cat status.txt)
 
 echo "result: ${result}"
-printf "status: ${status}\n"
+echo "status: ${status}"
 jq . output.txt
 
 if [ ! ${result} -eq 0 ]; then
