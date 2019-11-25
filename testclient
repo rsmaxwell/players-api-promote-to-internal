@@ -26,7 +26,10 @@ curl ${OPTIONS} -X POST ${ENDPOINT}${COMMAND} \
 --output output.txt > status.txt
 
 result=$?
+status=$(cat status.txt)
 
+echo "result: ${result}"
+printf "status: ${status}\n"
 cat output.txt
 
 if [ ! ${result} -eq 0 ]; then
@@ -34,7 +37,6 @@ if [ ! ${result} -eq 0 ]; then
     exit 1
 fi
 
-status=$(cat status.txt)
 if [ ${status} -eq 200 ]; then
     : # ok
 elif [ ${status} -eq 400 ]; then
@@ -58,7 +60,10 @@ curl ${OPTIONS} -X POST -u "${USERID}:${PASSWORD}" ${ENDPOINT}${COMMAND} \
 --output output.txt > status.txt
 
 result=$?
+status=$(cat status.txt)
 
+echo "result: ${result}"
+printf "status: ${status}\n"
 cat output.txt
 
 if [ ! ${result} -eq 0 ]; then
@@ -66,7 +71,6 @@ if [ ! ${result} -eq 0 ]; then
     exit 1
 fi
 
-status=$(cat status.txt)
 if [ ${status} -ne 200 ]; then
     echo "Error: $0[${LINENO}]"
     echo "status: ${status}"
@@ -95,7 +99,10 @@ curl ${OPTIONS} -X POST ${ENDPOINT}${COMMAND} \
 --output output.txt > status.txt
 
 result=$?
+status=$(cat status.txt)
 
+echo "result: ${result}"
+printf "status: ${status}\n"
 cat output.txt
 
 if [ ! ${result} -eq 0 ]; then
@@ -103,7 +110,6 @@ if [ ! ${result} -eq 0 ]; then
     exit 1
 fi
 
-status=$(cat status.txt)
 if [ ${status} -eq 200 ]; then
     : # ok
 elif [ ${status} -eq 400 ]; then
@@ -133,7 +139,10 @@ curl ${OPTIONS} -X PUT ${ENDPOINT}${COMMAND} \
 --output output.txt > status.txt
 
 result=$?
+status=$(cat status.txt)
 
+echo "result: ${result}"
+printf "status: ${status}\n"
 cat output.txt
 
 if [ ! ${result} -eq 0 ]; then
@@ -141,7 +150,6 @@ if [ ! ${result} -eq 0 ]; then
     exit 1
 fi
 
-status=$(cat status.txt)
 if [ ${status} -ne 200 ]; then
     echo "Error: $0[${LINENO}]"
     echo "status: ${status}"
@@ -167,7 +175,10 @@ curl ${OPTIONS} -X PUT ${ENDPOINT}${COMMAND} \
 --output output.txt > status.txt
 
 result=$?
+status=$(cat status.txt)
 
+echo "result: ${result}"
+printf "status: ${status}\n"
 cat output.txt
 
 if [ ! ${result} -eq 0 ]; then
@@ -175,7 +186,6 @@ if [ ! ${result} -eq 0 ]; then
     exit 1
 fi
 
-status=$(cat status.txt)
 if [ ${status} -ne 200 ]; then
     echo "Error: $0[${LINENO}]"
     echo "status: ${status}"
@@ -193,7 +203,10 @@ curl ${OPTIONS} -X GET ${ENDPOINT}${COMMAND} \
 --output output.txt > status.txt
 
 result=$?
+status=$(cat status.txt)
 
+echo "result: ${result}"
+printf "status: ${status}\n"
 cat output.txt
 
 if [ ! ${result} -eq 0 ]; then
@@ -201,7 +214,6 @@ if [ ! ${result} -eq 0 ]; then
     exit 1
 fi
 
-status=$(cat status.txt)
 if [ ${status} -ne 200 ]; then
     echo "Error: $0[${LINENO}]"
     echo "status: ${status}"
@@ -231,7 +243,10 @@ curl ${OPTIONS} -X GET ${ENDPOINT}${COMMAND} \
 --output output.txt > status.txt
 
 result=$?
+status=$(cat status.txt)
 
+echo "result: ${result}"
+printf "status: ${status}\n"
 cat output.txt
 
 if [ ! ${result} -eq 0 ]; then
@@ -239,7 +254,6 @@ if [ ! ${result} -eq 0 ]; then
     exit 1
 fi
 
-status=$(cat status.txt)
 if [ ${status} -ne 200 ]; then
     echo "Error: $0[${LINENO}]"
     echo "status: ${status}"
@@ -257,7 +271,10 @@ curl ${OPTIONS} -X GET ${ENDPOINT}${COMMAND} \
 --output output.txt > status.txt
 
 result=$?
+status=$(cat status.txt)
 
+echo "result: ${result}"
+printf "status: ${status}\n"
 cat output.txt
 
 if [ ! ${result} -eq 0 ]; then
@@ -265,7 +282,6 @@ if [ ! ${result} -eq 0 ]; then
     exit 1
 fi
 
-status=$(cat status.txt)
 if [ ${status} -ne 200 ]; then
     echo "Error: $0[${LINENO}]"
     echo "status: ${status}"
