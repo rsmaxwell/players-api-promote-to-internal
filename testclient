@@ -195,6 +195,36 @@ if [ ${status} -ne 200 ]; then
 fi
 
 echo "------------------------------------------------------------------"
+echo "Read Person - alice - [no cookies]"
+
+COMMAND="/users/alice"
+
+BAD_OPTIONS="--silent -w %{http_code}"
+
+curl ${BAD_OPTIONS} -X GET ${ENDPOINT}${COMMAND} \
+--header "Content-Type: application/json" \
+--header "Accept: application/json" \
+--output output.txt > status.txt
+
+result=$?
+status=$(cat status.txt)
+
+echo "result: ${result}"
+echo "status: ${status}"
+jq . output.txt
+
+if [ ! ${result} -eq 0 ]; then
+    echo "Error: $0[${LINENO}]"
+    exit 1
+fi
+
+if [ ${status} -ne 200 ]; then
+    echo "Error: $0[${LINENO}]"
+    echo "status: ${status}"
+    exit 1
+fi
+
+echo "------------------------------------------------------------------"
 echo "Read Person - alice"
 
 COMMAND="/users/alice"
