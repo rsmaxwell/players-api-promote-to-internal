@@ -15,7 +15,7 @@ cat > data.json <<EOT
     "firstname": "James",
     "lastname": "Bond",
     "email": "007@mi6.uk.gov",
-    "password": "secret"
+    "password": "topsecret"
 }
 EOT
 jq . data.json
