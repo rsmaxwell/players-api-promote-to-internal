@@ -2,7 +2,7 @@
 
 ENDPOINT="http://localhost:${PORT}/players-api"
 
-OPTIONS="--silent --cookie cookie-jar.txt --cookie-jar cookie-jar.txt --dump-header - -k"
+OPTIONS="--silent --cookie cookie-jar.txt --cookie-jar cookie-jar.txt -w %{http_code}"
 
 echo "------------------------------------------------------------------"
 echo "Register"
@@ -11,22 +11,37 @@ COMMAND="/users/register"
 
 cat > data.json <<EOT
 {  
-    "userID": "007",
-    "firstname": "James",
-    "lastname": "Bond",
-    "email": "james@mi6.co.uk",
-    "password": "topsecret"
+    "userID": "fred",
+    "firstname": "Fred",
+    "lastname": "Bloggs",
+    "email": "fred@bloggs.com",
+    "password": "fred"
 }
 EOT
 cat data.json
 
 curl ${OPTIONS} -X POST ${ENDPOINT}${COMMAND} \
 --header "Content-Type: application/json" \
---data-binary @data.json
+--data-binary @data.json \
+--output output.txt > status.txt
 
 result=$?
+
+cat output.txt
+
 if [ ! ${result} -eq 0 ]; then
     echo "Error: $0[${LINENO}]"
+    exit 1
+fi
+
+status=$(cat status.txt)
+if [ ${status} -eq 200 ]; then
+    : # ok
+elif [ ${status} -eq 400 ]; then
+    : # ok, already exists
+else
+    echo "Error: $0[${LINENO}]"
+    echo "status: ${status}"
     exit 1
 fi
 
@@ -39,11 +54,22 @@ PASSWORD="topsecret"
 
 curl ${OPTIONS} -X POST -u "${USERID}:${PASSWORD}" ${ENDPOINT}${COMMAND} \
 --header "Content-Type: application/json" \
---header "Accept: application/json"
+--header "Accept: application/json" \
+--output output.txt > status.txt
 
 result=$?
+
+cat output.txt
+
 if [ ! ${result} -eq 0 ]; then
     echo "Error: $0[${LINENO}]"
+    exit 1
+fi
+
+status=$(cat status.txt)
+if [ ${status} -ne 200 ]; then
+    echo "Error: $0[${LINENO}]"
+    echo "status: ${status}"
     exit 1
 fi
 
@@ -65,11 +91,26 @@ cat data.json
 
 curl ${OPTIONS} -X POST ${ENDPOINT}${COMMAND} \
 --header "Content-Type: application/json" \
---data-binary @data.json
+--data-binary @data.json \
+--output output.txt > status.txt
 
 result=$?
+
+cat output.txt
+
 if [ ! ${result} -eq 0 ]; then
     echo "Error: $0[${LINENO}]"
+    exit 1
+fi
+
+status=$(cat status.txt)
+if [ ${status} -eq 200 ]; then
+    : # ok
+elif [ ${status} -eq 400 ]; then
+    : # ok, already exists
+else
+    echo "Error: $0[${LINENO}]"
+    echo "status: ${status}"
     exit 1
 fi
 
@@ -88,11 +129,22 @@ cat data.json
 curl ${OPTIONS} -X PUT ${ENDPOINT}${COMMAND} \
 --header "Content-Type: application/json" \
 --header "Accept: application/json" \
---data-binary @data.json
+--data-binary @data.json \
+--output output.txt > status.txt
 
 result=$?
+
+cat output.txt
+
 if [ ! ${result} -eq 0 ]; then
     echo "Error: $0[${LINENO}]"
+    exit 1
+fi
+
+status=$(cat status.txt)
+if [ ${status} -ne 200 ]; then
+    echo "Error: $0[${LINENO}]"
+    echo "status: ${status}"
     exit 1
 fi
 
@@ -111,11 +163,22 @@ cat data.json
 curl ${OPTIONS} -X PUT ${ENDPOINT}${COMMAND} \
 --header "Content-Type: application/json" \
 --header "Accept: application/json" \
---data-binary @data.json
+--data-binary @data.json \
+--output output.txt > status.txt
 
 result=$?
+
+cat output.txt
+
 if [ ! ${result} -eq 0 ]; then
     echo "Error: $0[${LINENO}]"
+    exit 1
+fi
+
+status=$(cat status.txt)
+if [ ${status} -ne 200 ]; then
+    echo "Error: $0[${LINENO}]"
+    echo "status: ${status}"
     exit 1
 fi
 
@@ -127,15 +190,23 @@ COMMAND="/users/alice"
 curl ${OPTIONS} -X GET ${ENDPOINT}${COMMAND} \
 --header "Content-Type: application/json" \
 --header "Accept: application/json" \
---output output.txt 
+--output output.txt > status.txt
 
 result=$?
+
+cat output.txt
+
 if [ ! ${result} -eq 0 ]; then
     echo "Error: $0[${LINENO}]"
     exit 1
 fi
 
-jq . output.txt
+status=$(cat status.txt)
+if [ ${status} -ne 200 ]; then
+    echo "Error: $0[${LINENO}]"
+    echo "status: ${status}"
+    exit 1
+fi
 
 echo "------------------------------------------------------------------"
 echo "Read People"
@@ -156,11 +227,22 @@ cat data.json
 curl ${OPTIONS} -X GET ${ENDPOINT}${COMMAND} \
 --header "Content-Type: application/json" \
 --header "Accept: application/json" \
---data-binary @data.json
+--data-binary @data.json \
+--output output.txt > status.txt
 
 result=$?
+
+cat output.txt
+
 if [ ! ${result} -eq 0 ]; then
     echo "Error: $0[${LINENO}]"
+    exit 1
+fi
+
+status=$(cat status.txt)
+if [ ${status} -ne 200 ]; then
+    echo "Error: $0[${LINENO}]"
+    echo "status: ${status}"
     exit 1
 fi
 
@@ -171,11 +253,22 @@ COMMAND="/users/logout"
 
 curl ${OPTIONS} -X GET ${ENDPOINT}${COMMAND} \
 --header "Content-Type: application/json" \
---header "Accept: application/json"
+--header "Accept: application/json" \
+--output output.txt > status.txt
 
 result=$?
+
+cat output.txt
+
 if [ ! ${result} -eq 0 ]; then
     echo "Error: $0[${LINENO}]"
+    exit 1
+fi
+
+status=$(cat status.txt)
+if [ ${status} -ne 200 ]; then
+    echo "Error: $0[${LINENO}]"
+    echo "status: ${status}"
     exit 1
 fi
 
