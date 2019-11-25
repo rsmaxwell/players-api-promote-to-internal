@@ -18,7 +18,7 @@ cat > data.json <<EOT
     "password": "secret"
 }
 EOT
-cat data.json
+jq . data.json
 
 curl ${OPTIONS} -X POST ${ENDPOINT}${COMMAND} \
 --header "Content-Type: application/json" \
@@ -91,7 +91,7 @@ cat > data.json <<EOT
     "password": "wonder"
 }
 EOT
-cat data.json
+jq . data.json
 
 curl ${OPTIONS} -X POST ${ENDPOINT}${COMMAND} \
 --header "Content-Type: application/json" \
@@ -130,7 +130,7 @@ cat > data.json <<EOT
     "role": "normal"
 }
 EOT
-cat data.json
+jq . data.json
 
 curl ${OPTIONS} -X PUT ${ENDPOINT}${COMMAND} \
 --header "Content-Type: application/json" \
@@ -166,7 +166,7 @@ cat > data.json <<EOT
     "player": true
 }
 EOT
-cat data.json
+jq . data.json
 
 curl ${OPTIONS} -X PUT ${ENDPOINT}${COMMAND} \
 --header "Content-Type: application/json" \
@@ -234,7 +234,7 @@ cat > data.json <<EOT
     ]
 }
 EOT
-cat data.json
+jq . data.json
 
 curl ${OPTIONS} -X GET ${ENDPOINT}${COMMAND} \
 --header "Content-Type: application/json" \
