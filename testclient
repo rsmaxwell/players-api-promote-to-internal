@@ -1,8 +1,10 @@
 #!/bin/bash
 
-ENDPOINT="http://localhost:${PORT}/players-api"
+if [[ ! -z "${PORT}" ]]; then
+  PORT=4201
+fi
 
-OPTIONS="--silent --cookie cookie-jar.txt --cookie-jar cookie-jar.txt -w %{http_code}"
+ENDPOINT="http://localhost:${PORT}/players-api"
 
 echo "------------------------------------------------------------------"
 echo "Register"
@@ -20,33 +22,38 @@ cat > data.json <<EOT
 EOT
 jq . data.json
 
-curl ${OPTIONS} -X POST ${ENDPOINT}${COMMAND} \
+curl -X POST ${ENDPOINT}${COMMAND} \
+--silent \
+--cookie cookie-jar.txt \
+--cookie-jar cookie-jar.txt \
 --header "Content-Type: application/json" \
 --header "Accept: application/json" \
 --data-binary @data.json \
---output output.txt > status.txt
-
+--dump-header dump-header.txt \
+--output output.txt \
+--write-out %{http_code} > status.txt
 result=$?
-status=$(cat status.txt)
+set +x
 
 echo "result: ${result}"
-echo "status: ${status}"
-jq . output.txt
-
 if [ ! ${result} -eq 0 ]; then
     echo "Error: $0[${LINENO}]"
     exit 1
 fi
 
-if [ ${status} -eq 200 ]; then
+status=$(cat status.txt)
+echo "status: ${status}"
+if [ "${status}" -eq 200 ]; then
     : # ok
-elif [ ${status} -eq 400 ]; then
+elif [ "${status}" -eq 400 ]; then
     : # ok, already exists
 else
     echo "Error: $0[${LINENO}]"
     echo "status: ${status}"
     exit 1
 fi
+
+jq . output.txt
 
 echo "------------------------------------------------------------------"
 echo "Authenticate"
@@ -55,28 +62,43 @@ COMMAND="/users/authenticate"
 USERID="007"
 PASSWORD="topsecret"
 
-curl ${OPTIONS} -X POST -u "${USERID}:${PASSWORD}" ${ENDPOINT}${COMMAND} \
+echo "{ \"userid\": \"${USERID}\", \"password\": \"${PASSWORD}\" }" | jq .
+
+curl -X POST -u "${USERID}:${PASSWORD}" ${ENDPOINT}${COMMAND} \
+--silent \
+--cookie cookie-jar.txt \
+--cookie-jar cookie-jar.txt \
 --header "Content-Type: application/json" \
 --header "Accept: application/json" \
---output output.txt > status.txt
-
+--dump-header dump-header.txt \
+--output output.txt \
+--write-out %{http_code} > status.txt
 result=$?
-status=$(cat status.txt)
 
 echo "result: ${result}"
-echo "status: ${status}"
-jq . output.txt
-
 if [ ! ${result} -eq 0 ]; then
     echo "Error: $0[${LINENO}]"
     exit 1
 fi
 
-if [ ${status} -ne 200 ]; then
+status=$(cat status.txt)
+echo "status: ${status}"
+if [ "${status}" -eq 200 ]; then
+    : # ok
+else
     echo "Error: $0[${LINENO}]"
     echo "status: ${status}"
     exit 1
 fi
+
+jq . output.txt
+
+word=$(grep Access-Token dump-header.txt | cut -d " " -f 2)
+AccessToken=${word%%[[:space:]]}
+echo "AccessToken: [${AccessToken}]"
+
+RefreshToken=$(grep Set-Cookie dump-header.txt | cut -d " " -f 2 | cut -d "=" -f 2)
+echo "RefreshToken: [${RefreshToken}]"
 
 echo "------------------------------------------------------------------"
 echo "Register"
@@ -94,33 +116,38 @@ cat > data.json <<EOT
 EOT
 jq . data.json
 
-curl ${OPTIONS} -X POST ${ENDPOINT}${COMMAND} \
+curl -X POST ${ENDPOINT}${COMMAND} \
+--silent \
+--cookie cookie-jar.txt \
+--cookie-jar cookie-jar.txt \
 --header "Content-Type: application/json" \
 --header "Accept: application/json" \
 --data-binary @data.json \
---output output.txt > status.txt
-
+--dump-header dump-header.txt \
+--output output.txt \
+--write-out %{http_code} > status.txt
 result=$?
-status=$(cat status.txt)
+set +x
 
 echo "result: ${result}"
-echo "status: ${status}"
-jq . output.txt
-
 if [ ! ${result} -eq 0 ]; then
     echo "Error: $0[${LINENO}]"
     exit 1
 fi
 
-if [ ${status} -eq 200 ]; then
+status=$(cat status.txt)
+echo "status: ${status}"
+if [ "${status}" -eq 200 ]; then
     : # ok
-elif [ ${status} -eq 400 ]; then
+elif [ "${status}" -eq 400 ]; then
     : # ok, already exists
 else
     echo "Error: $0[${LINENO}]"
     echo "status: ${status}"
     exit 1
 fi
+
+jq . output.txt
 
 echo "------------------------------------------------------------------"
 echo "Update Person Role"
@@ -134,18 +161,23 @@ cat > data.json <<EOT
 EOT
 jq . data.json
 
-curl ${OPTIONS} -X PUT ${ENDPOINT}${COMMAND} \
+curl -X PUT ${ENDPOINT}${COMMAND} \
+--silent \
+--cookie cookie-jar.txt \
+--cookie-jar cookie-jar.txt \
 --header "Content-Type: application/json" \
 --header "Accept: application/json" \
+--header "Authorization: Bearer ${AccessToken}" \
 --data-binary @data.json \
---output output.txt > status.txt
+--dump-header dump-header.txt \
+--output output.txt \
+--write-out %{http_code} > status.txt
 
 result=$?
 status=$(cat status.txt)
 
 echo "result: ${result}"
 echo "status: ${status}"
-jq . output.txt
 
 if [ ! ${result} -eq 0 ]; then
     echo "Error: $0[${LINENO}]"
@@ -157,6 +189,8 @@ if [ ${status} -ne 200 ]; then
     echo "status: ${status}"
     exit 1
 fi
+
+jq . output.txt
 
 echo "------------------------------------------------------------------"
 echo "Update Person Player"
@@ -170,18 +204,23 @@ cat > data.json <<EOT
 EOT
 jq . data.json
 
-curl ${OPTIONS} -X PUT ${ENDPOINT}${COMMAND} \
+curl -X PUT ${ENDPOINT}${COMMAND} \
+--silent \
+--cookie cookie-jar.txt \
+--cookie-jar cookie-jar.txt \
 --header "Content-Type: application/json" \
 --header "Accept: application/json" \
+--header "Authorization: Bearer ${AccessToken}" \
 --data-binary @data.json \
---output output.txt > status.txt
+--dump-header dump-header.txt \
+--output output.txt \
+--write-out %{http_code} > status.txt
 
 result=$?
 status=$(cat status.txt)
 
 echo "result: ${result}"
 echo "status: ${status}"
-jq . output.txt
 
 if [ ! ${result} -eq 0 ]; then
     echo "Error: $0[${LINENO}]"
@@ -194,17 +233,22 @@ if [ ${status} -ne 200 ]; then
     exit 1
 fi
 
+jq . output.txt
+
 echo "------------------------------------------------------------------"
 echo "Read Person - alice - [no cookies]"
 
 COMMAND="/users/alice"
 
-BAD_OPTIONS="--silent -w %{http_code}"
-
-curl ${BAD_OPTIONS} -X GET ${ENDPOINT}${COMMAND} \
+curl -X PUT ${ENDPOINT}${COMMAND} \
+--silent \
 --header "Content-Type: application/json" \
 --header "Accept: application/json" \
---output output.txt > status.txt
+--header "Authorization: Bearer ${AccessToken}" \
+--data-binary @data.json \
+--dump-header dump-header.txt \
+--output output.txt \
+--write-out %{http_code} > status.txt
 
 result=$?
 status=$(cat status.txt)
@@ -224,22 +268,30 @@ if [ ${status} -ne 401 ]; then
     exit 1
 fi
 
+jq . output.txt
+
 echo "------------------------------------------------------------------"
 echo "Read Person - alice"
 
 COMMAND="/users/alice"
 
-curl ${OPTIONS} -X GET ${ENDPOINT}${COMMAND} \
+curl -X PUT ${ENDPOINT}${COMMAND} \
+--silent \
+--cookie cookie-jar.txt \
+--cookie-jar cookie-jar.txt \
 --header "Content-Type: application/json" \
 --header "Accept: application/json" \
---output output.txt > status.txt
+--header "Authorization: Bearer ${AccessToken}" \
+--data-binary @data.json \
+--dump-header dump-header.txt \
+--output output.txt \
+--write-out %{http_code} > status.txt
 
 result=$?
 status=$(cat status.txt)
 
 echo "result: ${result}"
 echo "status: ${status}"
-jq . output.txt
 
 if [ ! ${result} -eq 0 ]; then
     echo "Error: $0[${LINENO}]"
@@ -251,6 +303,8 @@ if [ ${status} -ne 200 ]; then
     echo "status: ${status}"
     exit 1
 fi
+
+jq . output.txt
 
 echo "------------------------------------------------------------------"
 echo "Read People"
@@ -268,18 +322,23 @@ cat > data.json <<EOT
 EOT
 jq . data.json
 
-curl ${OPTIONS} -X GET ${ENDPOINT}${COMMAND} \
+curl -X GET ${ENDPOINT}${COMMAND} \
+--silent \
+--cookie cookie-jar.txt \
+--cookie-jar cookie-jar.txt \
 --header "Content-Type: application/json" \
 --header "Accept: application/json" \
+--header "Authorization: Bearer ${AccessToken}" \
 --data-binary @data.json \
---output output.txt > status.txt
+--dump-header dump-header.txt \
+--output output.txt \
+--write-out %{http_code} > status.txt
 
 result=$?
 status=$(cat status.txt)
 
 echo "result: ${result}"
 echo "status: ${status}"
-jq . output.txt
 
 if [ ! ${result} -eq 0 ]; then
     echo "Error: $0[${LINENO}]"
@@ -291,23 +350,31 @@ if [ ${status} -ne 200 ]; then
     echo "status: ${status}"
     exit 1
 fi
+
+jq . output.txt
 
 echo "------------------------------------------------------------------"
 echo "Logout"
 
 COMMAND="/users/logout"
 
-curl ${OPTIONS} -X GET ${ENDPOINT}${COMMAND} \
+curl -X GET ${ENDPOINT}${COMMAND} \
+--silent \
+--cookie cookie-jar.txt \
+--cookie-jar cookie-jar.txt \
 --header "Content-Type: application/json" \
 --header "Accept: application/json" \
---output output.txt > status.txt
+--header "Authorization: Bearer ${AccessToken}" \
+--data-binary @data.json \
+--dump-header dump-header.txt \
+--output output.txt \
+--write-out %{http_code} > status.txt
 
 result=$?
 status=$(cat status.txt)
 
 echo "result: ${result}"
 echo "status: ${status}"
-jq . output.txt
 
 if [ ! ${result} -eq 0 ]; then
     echo "Error: $0[${LINENO}]"
@@ -319,5 +386,7 @@ if [ ${status} -ne 200 ]; then
     echo "status: ${status}"
     exit 1
 fi
+
+jq . output.txt
 
 echo "------------------------------------------------------------------"
