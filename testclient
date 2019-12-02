@@ -193,6 +193,65 @@ fi
 jq . output.txt
 
 echo "------------------------------------------------------------------"
+echo "Refresh"
+
+COMMAND="/users/refresh"
+
+set -x
+curl -X POST ${ENDPOINT}${COMMAND} \
+--silent \
+--cookie cookie-jar.txt \
+--cookie-jar cookie-jar.txt \
+--header "Content-Type: application/json" \
+--header "Accept: application/json" \
+--header "Authorization: Bearer ${AccessToken}" \
+--dump-header dump-header.txt \
+--output output.txt \
+--write-out %{http_code} > status.txt
+set +x
+
+result=$?
+status=$(cat status.txt)
+
+echo "result: ${result}"
+echo "status: ${status}"
+
+if [ ! ${result} -eq 0 ]; then
+    echo "Error: $0[${LINENO}]"
+    exit 1
+fi
+
+if [ ${status} -ne 200 ]; then
+    echo "Error: $0[${LINENO}]"
+    echo "status: ${status}"
+    exit 1
+fi
+
+AccessToken_old=${AccessToken}
+RefreshToken_old=${RefreshToken}
+
+word=$(grep Access-Token dump-header.txt | cut -d " " -f 2)
+AccessToken=${word%%[[:space:]]}
+echo "AccessToken: [${AccessToken}]"
+
+RefreshToken=$(grep Set-Cookie dump-header.txt | cut -d " " -f 2 | cut -d "=" -f 2)
+echo "RefreshToken: [${RefreshToken}]"
+
+if [ "${AccessToken_old}" == "${AccessToken}" ]; then
+    echo "AccessToken has NOT CHANGED"
+else
+    echo "AccessToken HAS changed"
+fi
+
+if [ "${RefreshToken_old}" == "${RefreshToken}" ]; then
+    echo "RefreshToken has NOT CHANGED"
+else
+    echo "RefreshToken HAS changed"
+fi
+
+jq . output.txt
+
+echo "------------------------------------------------------------------"
 echo "Update Person Player"
 
 COMMAND="/users/player/alice"
@@ -236,15 +295,16 @@ fi
 jq . output.txt
 
 echo "------------------------------------------------------------------"
-echo "Read Person - alice - [no cookies]"
+echo "Read Person - alice - [no access token]"
 
 COMMAND="/users/alice"
 
-curl -X PUT ${ENDPOINT}${COMMAND} \
+curl -X GET ${ENDPOINT}${COMMAND} \
 --silent \
+--cookie cookie-jar.txt \
+--cookie-jar cookie-jar.txt \
 --header "Content-Type: application/json" \
 --header "Accept: application/json" \
---header "Authorization: Bearer ${AccessToken}" \
 --data-binary @data.json \
 --dump-header dump-header.txt \
 --output output.txt \
@@ -255,7 +315,6 @@ status=$(cat status.txt)
 
 echo "result: ${result}"
 echo "status: ${status}"
-jq . output.txt
 
 if [ ! ${result} -eq 0 ]; then
     echo "Error: $0[${LINENO}]"
