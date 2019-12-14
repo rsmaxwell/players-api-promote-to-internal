@@ -93,13 +93,6 @@ fi
 
 jq . output.txt
 
-word=$(grep Access-Token dump-header.txt | cut -d " " -f 2)
-AccessToken=${word%%[[:space:]]}
-echo "AccessToken: [${AccessToken}]"
-
-RefreshToken=$(grep Set-Cookie dump-header.txt | cut -d " " -f 2 | cut -d "=" -f 2)
-echo "RefreshToken: [${RefreshToken}]"
-
 echo "------------------------------------------------------------------"
 echo "Register"
 
@@ -258,7 +251,7 @@ if [ ! ${result} -eq 0 ]; then
     exit 1
 fi
 
-if [ ${status} -ne 403 ]; then
+if [ ${status} -ne 401 ]; then
     echo "Error: $0[${LINENO}]"
     echo "status: ${status}"
     exit 1
@@ -302,7 +295,7 @@ fi
 jq . output.txt
 
 echo "------------------------------------------------------------------"
-echo "Read People"
+echo "List People"
 
 COMMAND="/users"
 
@@ -317,7 +310,7 @@ cat > data.json <<EOT
 EOT
 jq . data.json
 
-curl -X GET ${ENDPOINT}${COMMAND} \
+curl -X POST ${ENDPOINT}${COMMAND} \
 --silent \
 --cookie cookie-jar.txt \
 --cookie-jar cookie-jar.txt \
